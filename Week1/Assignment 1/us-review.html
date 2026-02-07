@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Export</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+<div class="user-story-review">
+  <h2>User Story Quality Analysis - Telemetry Domain</h2>
+  
+  <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+    <thead>
+      <tr style="background-color: #2c3e50; color: white;">
+        <th>Parameter</th>
+        <th>Description</th>
+        <th>Score (out of 20)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Clarity</strong></td>
+        <td>The story conveys the core need – role‑based access control – and lists the default roles. However, terms such as “primary role”, “secondary roles”, and “relevant widgets” are not defined, and the conflict‑resolution rules when permissions overlap are missing. This can lead to differing interpretations among developers, QA, and IoT engineers.</td>
+        <td style="text-align: center;">15</td>
+      </tr>
+      <tr>
+        <td><strong>Completeness</strong></td>
+        <td>Acceptance criteria cover most functional aspects, but several non‑functional and contextual items are absent: pre‑condition that at least one admin must exist, storage location & replication strategy for role definitions, synchronization latency for distributed edge services, failure handling (e.g., network partition while assigning a role), and GDPR‑related audit‑log retention. Device‑level considerations (e.g., token refresh on edge gateways) are also omitted.</td>
+        <td style="text-align: center;">13</td>
+      </tr>
+      <tr>
+        <td><strong>Business Value Alignment</strong></td>
+        <td>Role‑based access directly supports security, compliance (least‑privilege, GDPR), and operational efficiency – all critical for a telemetry platform that handles sensitive vehicle location and sensor data. The story, however, does not explicitly tie the benefit to telemetry outcomes such as reduced data‑leak risk or faster incident response.</td>
+        <td style="text-align: center;">16</td>
+      </tr>
+      <tr>
+        <td><strong>Testability</strong></td>
+        <td>The criteria are testable, but edge cases are not fully enumerated: assigning multiple secondary roles with overlapping permissions, removing the last admin, role changes during an active API session, and audit‑log integrity under high‑throughput role updates. Without these, QA may miss critical failure paths.</td>
+        <td style="text-align: center;">14</td>
+      </tr>
+      <tr>
+        <td><strong>Technical Feasibility</strong></td>
+        <td>Implementing RBAC in a telemetry system is technically straightforward. The story respects typical constraints – it does not require device‑side changes, only backend services, API gateways, and UI layers. Considerations such as cache invalidation on edge gateways and token refresh are implied but not contradictory.</td>
+        <td style="text-align: center;">18</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <h3 style="color: #2c3e50;">Overall Score: <span style="color: #27ae60;">76 / 100</span></h3>
+  
+  <h3 style="color: #2c3e50;">Improvement Recommendations:</h3>
+  <ul style="line-height: 1.8;">
+    <li><strong>Clarity:</strong> Define the hierarchy and conflict‑resolution rules for primary vs. secondary roles (e.g., “permissions are additive; the most permissive rule wins”). Explicitly list which dashboard widgets belong to each role and provide a matrix reference.</li>
+    <li><strong>Completeness:</strong> Add pre‑conditions such as “system must always have at least one active Admin”. Specify where role definitions are persisted (e.g., centralized IAM service with eventual consistency across edge gateways). Include failure scenarios – what happens if the role‑assignment API times‑out or the network is partitioned. Mention audit‑log retention period and GDPR‑compliant pseudonymisation.</li>
+    <li><strong>Business Value Alignment:</strong> Tie the access‑control capability to telemetry outcomes: “By restricting view‑only access to live vehicle streams, we reduce the risk of data leakage and enable faster compliance audits, ultimately lowering potential fines and improving customer trust.”</li>
+    <li><strong>Testability:</strong> Expand acceptance criteria with concrete edge cases:
+      <ul>
+        <li>Assign a user both Dispatcher (view live trips) and Viewer (view historical data) – verify combined UI.</li>
+        <li>Attempt to remove the last Admin and expect a warning + abort.</li>
+        <li>Change a role while the user holds a valid JWT; ensure the next API call reflects the new permissions without requiring re‑login.</li>
+        <li>Simulate high‑concurrency role updates (e.g., 100 simultaneous assignments) and verify audit‑log ordering.</li>
+      </ul>
+    </li>
+    <li><strong>Technical Feasibility (optional fine‑tuning):</strong> Document how role changes propagate to edge devices that cache permissions (e.g., via a Pub/Sub invalidation message). Clarify expected latency (e.g., <5 seconds) for the “next page load/API call” requirement, ensuring it aligns with the telemetry platform’s real‑time constraints.</li>
+  </ul>
+</div>
+</body>
+</html>
