@@ -1,0 +1,8 @@
+Home Assignment
+User story reviewer Agent
+--API Request 
+--Parser(Stringify)
+--Groq(Title,Desciprition and acceptance criteria)
+--Prompt Template(prompt variable{})
+--Groq(Generate the review score)
+--Save file (txt)
