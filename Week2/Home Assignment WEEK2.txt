@@ -1,0 +1,59 @@
+📌 Home Assignment
+Similar to test case ingestion, please ingest the following into MongoDB:
+1️⃣ User Stories
+2️⃣ 6000+ Test Cases
+⚠️ Important Note
+Please delete the existing 500 test cases
+Replace them with 6000+ new test cases
+📂 Excel File Paths (Available in Codebase)
+src/data/userstories.xlsx
+src/data/testcases.xlsx
+📌 Index Creation – userstories Collection
+Please create the index for the userstories collection using the below index definition:
+
+
+{
+  "fields": [
+    {
+      "type": "vector",
+      "path": "embedding",
+      "numDimensions": 1024,
+      "similarity": "cosine"
+    },
+    {
+      "type": "filter", 
+      "path": "jiraMetadata.projectKey"
+    },
+    {
+      "type": "filter",
+      "path": "status.name"
+    },
+    {
+      "type": "filter",
+      "path": "priority.name"
+    },
+    {
+      "type": "filter",
+      "path": "assignee.displayName"
+    },
+    {
+      "type": "filter",
+      "path": "components"
+    },
+    {
+      "type": "filter",
+      "path": "labels"
+    },
+    {
+      "type": "filter",
+      "path": "fixVersions"
+    }
+  ]
+}
+
+
+✅ Ensure:
+Data is ingested correctly
+Old test cases are removed
+Index is created successfully
+Reach out if you face any issues 👍
